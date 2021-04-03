@@ -1,6 +1,7 @@
 <template>
     <div class="style1">
         <h1>{{ message }}</h1>
+        <p v-if="errored">サーバとの通信でエラーが発生しています</p>
         <p v-for="user in users">{{ user.name.title }} {{ user.name.last }}</p>
         <button
       class="btn-sm shadow-none border border-primary p-2"
@@ -15,7 +16,8 @@ export default {
     data() {
         return {
            message: 'Axios',
-            users: []
+            users: [],
+            errored: false
         };
     },
 methods: {
@@ -26,8 +28,8 @@ axios.get('https://randomuser.me/api/',
                 results: '5'
               }
             })
-        .then(response => this.users = response.data.results)
-        .catch(response => console.error(response))
+        .then(response => {this.users = response.data.results})
+        .catch(error => {console.log(error)this.errored = true})
     },
     },
 }
